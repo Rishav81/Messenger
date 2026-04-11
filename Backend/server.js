@@ -4,13 +4,15 @@ import authRouter from "./Routes/auth.js";
 import messageRouter from "./Routes/message.js";
 import connectDB from "./lib/db.js";
 import { ENV } from "./lib/env.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 const PORT = ENV.PORT || 3000;
 
 // Middleware (important for APIs)
-app.use(express.json());
+app.use(express.json()); //req.body
+app.use(cookieParser()); //for middleware
 
 app.get("/", (req, res) => {
   res.send("Server is Working ");
