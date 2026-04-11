@@ -7,11 +7,11 @@ import { ENV } from "../lib/env.js";
 export const signup = async (req, res) => {
   let { fullName, email, password } = req.body;
 
-  // ✅ 1. Trim inputs
-  fullName = fullName?.trim();
-  email = email?.trim().toLowerCase();
-
   try {
+    // ✅ 1. Trim inputs
+    fullName = fullName?.trim();
+    email = email?.trim().toLowerCase();
+
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -72,9 +72,55 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  res.send("Login endpoint");
+  let { email, password } = req.body;
+  try {
+    email = email?.trim().toLowerCase();
+    password = password?.trim();
+
+    //Check email and password
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Emil and Password are required",
+      });
+    }
+
+    //check user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
+    }
+
+    //check email verified
+    // if (!user.isVerified) {
+    //   return res.status(400).json({
+    //     message: "Please verify your email",
+    //   });
+    // }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
+    }
+    generateToken(user._id, res);
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({
+      message: "Internal error",
+    });
+  }
 };
 
-export const logout = async (req, res) => {
-  res.send("Logout endpoint");
+export const logout = (_, res) => {
+  res.clearCookie("jwt");
+  res.status(200).json({ message: "Logged out successfully" });
 };
