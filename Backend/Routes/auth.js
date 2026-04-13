@@ -10,13 +10,8 @@ import { arcjetProtection } from "../middleware/arcjetMiddleware.js";
 const authRoute = express.Router();
 
 //Checking all protection before
-authRoute.use(arcjetProtection);
+// authRoute.use(arcjetProtection);
 
-authRoute.get("/test", (req, res) => {
-  res.status(200).json({
-    message: "Testing of arcjet",
-  });
-});
 authRoute.post("/signup", signup);
 authRoute.post("/login", login);
 authRoute.post("/logout", logout);
