@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRouter);
-app.use("/mess", messageRouter);
+app.use("/message", messageRouter);
 
 const startServer = async () => {
   try {

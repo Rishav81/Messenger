@@ -40,11 +40,33 @@ export const useAuthStore = create((set) => ({
       const res = await api.post("/auth/login", data);
       set({ authUser: res.data });
 
-      toast.success("Login successfully!");
+      toast.success("Logged in successfully!");
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
       set({ isLoggingIn: false });
+    }
+  },
+
+  logout: async () => {
+    try {
+      await api.post("/auth/logout");
+      set({ authUser: null });
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      toast.error("Error logging out");
+      console.log("Error win logout:", error);
+    }
+  },
+
+  updateProfile: async (data) => {
+    try {
+      const res = await api.put("/auth/update-profile", data);
+      set({ authUser: res.data });
+      toast.success("Profile uploaded successfully");
+    } catch (error) {
+      console.log("Error in update profile:", error);
+      toast.error(error.response.data.message);
     }
   },
 }));
