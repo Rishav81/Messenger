@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 import authRouter from "./Routes/auth.js";
 import messageRouter from "./Routes/message.js";
@@ -11,6 +12,12 @@ const app = express();
 const PORT = ENV.PORT || 3000;
 
 // Middleware (important for APIs)
+app.use(
+  cors({
+    origin: ENV.CLIENT_URL,
+    credentials: true,
+  }),
+); //Allow frontend to tal with backend
 app.use(express.json()); //req.body
 app.use(cookieParser()); //for middleware
 
