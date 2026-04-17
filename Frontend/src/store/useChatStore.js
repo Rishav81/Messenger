@@ -35,7 +35,7 @@ export const useChatStore = create((set, get) => ({
       const res = await api.get("/message/chats");
       set({ chats: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Unauthorized access");
     } finally {
       set({ isUsersLoading: false });
     }

@@ -17,7 +17,7 @@ app.use(
     origin: ENV.CLIENT_URL,
     credentials: true,
   }),
-); //Allow frontend to tal with backend
+); //Allow frontend to talk with backend
 app.use(express.json()); //req.body
 app.use(cookieParser()); //for middleware
 
